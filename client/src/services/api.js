@@ -1,9 +1,8 @@
-// src/services/api.js
-import axios from "axios";
+import axios from 'axios';
 
 const api = axios.create({
-  baseURL: "http://localhost:7001",
-  withCredentials: true,
+  baseURL: 'http://localhost:3001', // Your backend URL
+  withCredentials: true,           // Needed to send cookies/session
 });
 
-export default api; // ✅ default export
+export default api;

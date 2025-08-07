@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import LoginForm from '../components/LoginForm';
 import { login as loginUser, register as registerUser } from '../services/authApi';
 import { useNavigate } from 'react-router-dom';
+import { useSession } from '../context/SessionContext';
 
 const LoginPages = () => {
   const [isRegister, setIsRegister] = useState(false);
   const navigate = useNavigate();
+
 
   const handleAuthSubmit = async ({ username, password }) => {
     try {

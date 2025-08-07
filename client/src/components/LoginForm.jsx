@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { register } from "../services/authApi";
+import { register, login } from "../services/authApi"; // Make sure you have a login API in authApi.js
 
-const LoginForm = ({ isRegister = false, onSubmit}) => {
+const LoginForm = ({ isRegister = false, onSubmit }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -10,25 +10,35 @@ const LoginForm = ({ isRegister = false, onSubmit}) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    // TODO: handle login logic here or call `onSubmit()`
+    try {
+      const { data } = await login(username, password); // <-- This must exist in your services
+      setMessage("Login successful");
+      setError("");
+      if (onSubmit) onSubmit(data); // You can handle redirection or auth state here
+    } catch (error) {
+      console.error("Login error:", error);
+      setMessage("");
+      setError("Invalid username or password");
+    }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
     try {
       const { data } = await register(username, password);
-      setMessage(data.message);
+      setMessage(data.message || "User registered successfully");
       setUsername("");
       setPassword("");
       setConfirmPassword("");
       setError("");
-      
     } catch (error) {
       console.error("Register error:", error);
-      setUsername("");
-      setPassword("");
-      setConfirmPassword("");
-      setError("Something went wrong during the registration");
+      setError(error.response?.data?.message || "Registration failed");
     }
   };
 
@@ -86,7 +96,6 @@ const LoginForm = ({ isRegister = false, onSubmit}) => {
         type="submit"
         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded mt-2"
       >
-        
         {isRegister ? "Register" : "Login"}
       </button>
     </form>
