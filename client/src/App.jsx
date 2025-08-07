@@ -1,10 +1,13 @@
-import './App.css'; // or './App.css' if that’s where Tailwind directives are
+import { RouterProvider } from 'react-router-dom';
+import './App.css';
+import { router } from './routes.jsx';
 
 function App() {
   return (
-    <div className="bg-slate-900 h-screen">
-      <div className="flex justify-center item-center h-screen"></div>
+    <div className="bg-blue-100 min-h-screen">
+      <RouterProvider router={router} />
     </div>
+    
   );
 }
 
